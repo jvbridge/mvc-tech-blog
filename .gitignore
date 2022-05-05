@@ -1,0 +1,7 @@
+.env
+.vscode
+.Trashes/
+.DS_Store
+
+node_modules/
+ignore/
