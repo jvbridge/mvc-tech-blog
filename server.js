@@ -5,7 +5,7 @@ const exphbs = require("express-handlebars");
 // initialize sequelize
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
-// TODO: const routes = require("./contollers");
+const routes = require("./contollers");
 const sequelize = require("./config/connection");
 // TODO: const helpers = require("./utils/helpers");
 
@@ -32,7 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// TODO: app.use(routes);
+app.use(routes);
 
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => {
