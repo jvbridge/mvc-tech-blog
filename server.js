@@ -24,21 +24,32 @@ const sess = {
     secure: false,
     sameSite: "strict",
   },
+
+  resave: false,
+  saveUninitialized: true,
+  store: new SequelizeStore({
+    db: sequelize,
+  }),
 };
 
 // Middleware
+
+// setting up express sessions
+app.use(session(sess));
+
+// handlebars engine
+app.engine("handlebars", hbs.engine);
+app.set("view engine", "handlebars");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
+// router set up
 app.use(routes);
 
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => {
-    console.log(
-      `\nServer running on port ${PORT}. Visit http://localhost:${PORT} and 
-      create an account!`
-    );
+    console.log(`\nServer running on port ${PORT}`);
   });
 });
