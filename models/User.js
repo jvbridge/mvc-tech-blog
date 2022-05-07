@@ -9,7 +9,7 @@ class User extends Model {
   /**
    * This method is used to check the user's password with what is in the
    * database. It returns true if the password is correct, false if not.
-   * @param {string} pass - the user's
+   * @param {string} pass - the user's password
    * @returns {boolean}
    */
   checkPassword(pass) {
