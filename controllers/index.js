@@ -1,7 +1,16 @@
 const router = require("express").Router();
 
-// TODO: const userRoutes = require("./user-routes");
+/**
+ * This will serve up user facing infomation
+ */
+const homeRoutes = require("./homeRoutes");
+router.use("/", homeRoutes);
 
-// TODO: router.use("/users", userRoutes);
+/**
+ * API is all non user facing queries. They will be used primarily to modify the
+ * database
+ */
+const apiRoutes = require("./api");
+router.use("/api", apiRoutes);
 
 module.exports = router;
