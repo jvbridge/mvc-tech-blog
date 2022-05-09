@@ -1,6 +1,7 @@
 const { Model, DataTypes } = require("sequelize");
 const bcrypt = require("bcrypt");
 const sequelize = require("../config/connection");
+const Posts = require("./posts");
 
 /**
  * User is a table used to store each individual user in the database.
@@ -14,6 +15,14 @@ class User extends Model {
    */
   checkPassword(pass) {
     return bcrypt.compareSync(pass, this.password);
+  }
+
+  createPost(title, body) {
+    return Posts.create({
+      user_id: this.id,
+      title,
+      body,
+    });
   }
 }
 

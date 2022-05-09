@@ -1,0 +1,17 @@
+[
+  {
+    "username":"Haru",
+    "email": "coolcat13@example.com",
+    "password": "cassIsCool"
+  },
+  {
+    "username":"Farley",
+    "email": "funCat@example.com",
+    "password": "JeromeIsCool"
+  },
+  {
+    "username":"Reddit",
+    "email":"4chan@reddit.com",
+    "password":"alwaysRight"
+  }
+]
