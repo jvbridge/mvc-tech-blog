@@ -39,7 +39,7 @@ router.get("/users", withAuth, async (req, res) => {
     });
 
     const users = userData.map((user) => user.get({ plain: true }));
-    res.render("users", { loggedin: req.session.loggedIn, users });
+    res.render("users", { loggedIn: req.session.loggedIn, users });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -63,13 +63,13 @@ router.get("/users/:username", withAuth, async (req, res) => {
     });
 
     const posts = postData.map((post) => post.get({ plain: true }));
-    res.render("userpage", { loggedin: req.session.loggedIn, posts });
+    res.render("userpage", { loggedIn: req.session.loggedIn, posts });
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-router.get("/posts", async (req, res) => {
+router.get("/posts", withAuth, async (req, res) => {
   try {
     // get all posts
     const postData = await Posts.findAll({
@@ -89,7 +89,7 @@ router.get("/posts", async (req, res) => {
     // serialize them
     const posts = postData.map((post) => post.get({ plain: true }));
 
-    res.render("posts", { posts });
+    res.render("posts", { loggedIn: req.session.loggedIn, posts });
   } catch (err) {
     res.status(500).json(err);
   }
