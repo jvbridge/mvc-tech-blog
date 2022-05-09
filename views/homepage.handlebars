@@ -1,1 +1,20 @@
-<h1>Welcome to the forum!</h1>
+<div class="card mt-2 mx-2">
+  <h2 class="card-title mx-2">Welcome to the forum!</h2>
+
+  <div class="card-body">
+    {{#if loggedIn}}
+
+      <div class="form-floating">
+        <textarea
+          class="form-control"
+          placeholder="Post your thoughts"
+          id="floatingTextarea2"
+          style="height: 100px"
+        ></textarea>
+        <label for="floatingTextarea2">Comments</label>
+      </div>
+    {{else}}
+      <h3>Be sure to log in if you want to make a post!</h3>
+    {{/if}}
+  </div>
+</div>
