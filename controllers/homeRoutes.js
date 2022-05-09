@@ -73,14 +73,8 @@ router.get("/posts", withAuth, async (req, res) => {
   try {
     // get all posts
     const postData = await Posts.findAll({
-      include: [
-        {
-          model: User,
-          required: true,
-        },
-      ],
+      include: [{ model: User, required: true }],
     });
-
     if (!postData) {
       res.status(404).json({ message: "no posts yet" });
       return;
@@ -89,7 +83,42 @@ router.get("/posts", withAuth, async (req, res) => {
     // serialize them
     const posts = postData.map((post) => post.get({ plain: true }));
 
+    // send them through the rendering engine
     res.render("posts", { loggedIn: req.session.loggedIn, posts });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get("/posts/:id", async (req, res) => {
+  try {
+    // get the post in question
+    const postData = await Posts.findOne({
+      where: { id: req.params.id },
+      include: [{ model: User, required: true }],
+    });
+
+    // No post? 404 error
+    if (!postData) {
+      res.status(404).json({ message: "post not found" });
+      return;
+    }
+
+    // get all comments
+    const commentData = await Comments.findAll({
+      where: { post_id: req.params.id },
+      include: [{ model: User, required: true }],
+    });
+
+    console.log("got comments: ", commentData);
+    // serealize the post
+    const post = postData.get({ plain: true });
+    const comments = commentData.map((comment) => {
+      return comment.get({ plain: true });
+    });
+
+    console.log("sending comments: ", comments);
+    res.render("post", { loggedIn: req.session.loggedIn, post, comments });
   } catch (err) {
     res.status(500).json(err);
   }
