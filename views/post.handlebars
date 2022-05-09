@@ -1,0 +1,20 @@
+<div class="card mx-2">
+  <h2 class="card-title">{{post.title}}</h2>
+  <a href="/users/{{post.user.username}}">
+    <h6 class="card-subtitle mb-2 text-muted mx-2">{{post.user.username}}</h6>
+  </a>
+  <div class="card-body">
+    {{post.body}}
+  </div>
+</div>
+
+{{#each comments as |comment|}}
+  <div class="card mt-2 mx-5">
+    <a href="/users/{{comment.user.username}}">
+      <h5 class="card-title ml-3">{{comment.user.username}}</h5>
+    </a>
+    <div class="card-body">
+      {{comment.body}}
+    </div>
+  </div>
+{{/each}}

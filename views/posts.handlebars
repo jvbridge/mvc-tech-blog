@@ -1,0 +1,13 @@
+{{#each posts as |post|}}
+  <div class="card mt-2 mx-2">
+    <a href="/posts/{{post.id}}"><h2
+        class="card-title mx-2"
+      >{{post.title}}</h2></a>
+    <a href="/users/{{post.user.username}}">
+      <h3 class="card-subtitle mb-2 text-muted mx-2">{{post.user.username}}</h3>
+    </a>
+    <div class="card-body">
+      {{post.body}}
+    </div>
+  </div>
+{{/each}}
