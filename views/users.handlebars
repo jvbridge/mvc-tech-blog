@@ -1,11 +1,14 @@
-{{!-- default home page view --}}
+{{! default home page view }}
 {{#each users as |user|}}
-<div class="row align-center mb-5">
-  <div class="col-md-6">
-    <h2>{{user.username}}</h2>
+  <div class="row align-center mb-5">
+    <div class="col-md-4">
+      <h2>{{user.username}}</h2>
+    </div>
+    <div class="col-md-4">
+      <h3><a href="mailto:{{user.email}}">{{user.email}}</a></h3>
+    </div>
+    <div class="col-md-4">
+      <h3><a href="/users/{{user.username}}">{{user.username}}</a></h3>
+    </div>
   </div>
-  <div class="col-md-6">
-    <h3><a href="mailto:{{user.email}}">{{user.email}}</a></h3>
-  </div>
-</div>
 {{/each}}
