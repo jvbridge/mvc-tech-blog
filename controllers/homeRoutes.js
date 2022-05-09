@@ -1,10 +1,10 @@
 const router = require("express").Router();
-const { User, Posts } = require("../models");
+const { User, Posts, Comments } = require("../models");
 const withAuth = require("../util/auth");
 
 router.get("/", async (req, res) => {
   try {
-    res.render("homepage", { loggedIn: req.session.loggedin });
+    res.render("homepage", { loggedIn: req.session.loggedIn });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
 
 router.get("/login", async (req, res) => {
   try {
-    if (req.session.loggedin) {
+    if (req.session.loggedIn) {
       res.redirect("/");
       return;
     }
@@ -39,7 +39,7 @@ router.get("/users", withAuth, async (req, res) => {
     });
 
     const users = userData.map((user) => user.get({ plain: true }));
-    res.render("users", { loggedin: req.session.loggedin, users });
+    res.render("users", { loggedin: req.session.loggedIn, users });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -48,7 +48,6 @@ module.exports = router;
 
 router.get("/users/:username", withAuth, async (req, res) => {
   try {
-    console.log("getting user information for: ", req.params);
     const userData = await User.findOne({
       attributes: { exclude: ["password"] },
       where: { username: req.params.username },
@@ -64,7 +63,33 @@ router.get("/users/:username", withAuth, async (req, res) => {
     });
 
     const posts = postData.map((post) => post.get({ plain: true }));
-    res.render("userpage", { loggedin: req.session.loggedin, posts });
+    res.render("userpage", { loggedin: req.session.loggedIn, posts });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get("/posts", async (req, res) => {
+  try {
+    // get all posts
+    const postData = await Posts.findAll({
+      include: [
+        {
+          model: User,
+          required: true,
+        },
+      ],
+    });
+
+    if (!postData) {
+      res.status(404).json({ message: "no posts yet" });
+      return;
+    }
+
+    // serialize them
+    const posts = postData.map((post) => post.get({ plain: true }));
+
+    res.render("posts", { posts });
   } catch (err) {
     res.status(500).json(err);
   }
