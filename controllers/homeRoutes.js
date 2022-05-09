@@ -46,7 +46,7 @@ router.get("/users", withAuth, async (req, res) => {
 });
 module.exports = router;
 
-router.get("/users/:username", async (req, res) => {
+router.get("/users/:username", withAuth, async (req, res) => {
   try {
     console.log("getting user information for: ", req.params);
     const userData = await User.findOne({
