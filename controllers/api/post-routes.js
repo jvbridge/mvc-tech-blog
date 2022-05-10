@@ -10,7 +10,7 @@ router.post("/", async (req, res) => {
       return;
     }
 
-    if (!req.body.body || req.body.title) {
+    if (!req.body.body || !req.body.title) {
       res.status(400).json({ message: "missing fields" });
     }
 

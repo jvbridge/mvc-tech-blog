@@ -3,27 +3,31 @@
   <div class="card-body">
     <h2 class="card-title mx-2">Welcome to the forum!</h2>
     {{#if loggedIn}}
-      <div class="form-floating mb-3">
-        <input
-          type="text"
-          class="form-control"
-          id="floatingInput"
-          placeholder="Post Title"
-        />
-        <label for="floatingInput">Post Title</label>
+      <div class="form post-form">
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="post-title"
+            placeholder="Post Title"
+          />
+          <label for="floatingInput">Post Title</label>
+        </div>
+        <div class="form-floating mb-3">
+          <textarea
+            class="form-control"
+            placeholder="Post your thoughts"
+            id="post-body"
+            style="height: 100px"
+          ></textarea>
+          <label for="floatingTextarea2">Post your thoughts</label>
+        </div>
+        <button class="btn btn-primary post-btn" type="submit">Post!</button>
       </div>
-      <div class="form-floating mb-3">
-        <textarea
-          class="form-control"
-          placeholder="Post your thoughts"
-          id="floatingTextarea2"
-          style="height: 100px"
-        ></textarea>
-        <label for="floatingTextarea2">Post your thoughts</label>
-      </div>
-      <button class="btn btn-primary" type="submit">Post!</button>
     {{else}}
       <h3>Be sure to log in if you want to make a post!</h3>
     {{/if}}
   </div>
 </div>
+
+<script src="./assets/homepage.js"></script>
