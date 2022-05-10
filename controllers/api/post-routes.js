@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Posts } = require("../../models");
+const { Posts, Comments } = require("../../models");
 
 router.post("/", async (req, res) => {
   try {
@@ -136,5 +136,40 @@ router.post("/:id/comment", (req, res) =>{
     res.status(500).json(err);
   }
 });
+
+router.update("/comment/:commentId", async (req,res) =>{
+  try {
+    // can't update anything if not logged in
+    if (!req.session.loggedIn) {
+      res
+        .status(403)
+        .json({ message: "you can't make a comment when not logged in" });
+      return;
+    }
+
+    // checking formatting
+    if (!req.body.body) {
+      res.status(400).json({ message: "missing fields" });
+      return;
+    }
+
+    // finding the comment
+    const commentData = await Comments.findByPk(req.params.id);
+
+    // tell them if we can't find that comment
+    if (!commentData) {
+      res.status(404).json({ message: `no comment with ID ${req.params.id}` });
+      return;
+    }
+
+    // all checks passed, lets update the comment
+    await commentData.update({
+      body: req.body.body
+    })
+    res.status(200).json({ message: "Updated the comment successfully" });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
 
 module.exports = router;
