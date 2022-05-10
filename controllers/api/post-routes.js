@@ -143,7 +143,7 @@ router.update("/comment/:commentId", async (req,res) =>{
     if (!req.session.loggedIn) {
       res
         .status(403)
-        .json({ message: "you can't make a comment when not logged in" });
+        .json({ message: "you can't update a comment when not logged in" });
       return;
     }
 
@@ -162,6 +162,10 @@ router.update("/comment/:commentId", async (req,res) =>{
       return;
     }
 
+    if(commentData.userId != req.session.userId){
+      res.status(404).json({ message: "can't edit some else's comment" });
+    }
+
     // all checks passed, lets update the comment
     await commentData.update({
       body: req.body.body
@@ -170,6 +174,38 @@ router.update("/comment/:commentId", async (req,res) =>{
   } catch (err) {
     res.status(500).json(err);
   }
-})
+});
+
+router.delete("/comment/:commentId", async (req,res) =>{
+  try {
+    // can't update anything if not logged in
+    if (!req.session.loggedIn) {
+      res
+        .status(403)
+        .json({ message: "you can't delete a comment when not logged in" });
+      return;
+    }
+
+    // finding the comment
+    const commentData = await Comments.findByPk(req.params.id);
+
+    // tell them if we can't find that comment
+    if (!commentData) {
+      res.status(404).json({ message: `no comment with ID ${req.params.id}` });
+      return;
+    }
+
+    if(commentData.userId != req.session.userId){
+      res.status(404).json({ message: "can't delete some else's comment" });
+    }
+
+    // all checks passed, lets delete the comment
+    await commentData.destroy();
+    res.status(200).json({ message: "Deleted the comment successfully" });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 
 module.exports = router;
