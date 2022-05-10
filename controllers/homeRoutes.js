@@ -110,14 +110,12 @@ router.get("/posts/:id", async (req, res) => {
       include: [{ model: User, required: true }],
     });
 
-    console.log("got comments: ", commentData);
     // serealize the post
     const post = postData.get({ plain: true });
     const comments = commentData.map((comment) => {
       return comment.get({ plain: true });
     });
 
-    console.log("sending comments: ", comments);
     res.render("post", { loggedIn: req.session.loggedIn, post, comments });
   } catch (err) {
     res.status(500).json(err);
