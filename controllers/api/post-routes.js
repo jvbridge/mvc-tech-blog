@@ -84,11 +84,11 @@ router.put("/:id", async (req, res) => {
       return;
     }
 
-    // can't delete someone else's post
+    // can't update someone else's post
     if (postData.userId != req.session.userId) {
       res
         .status(403)
-        .json("User is not permitted to delete someone else's post");
+        .json("User is not permitted to edit someone else's post");
       return;
     }
 
@@ -99,6 +99,39 @@ router.put("/:id", async (req, res) => {
     });
 
     res.status(200).json({ message: "Removed the post successfully" });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.post("/:id/comment", (req, res) =>{
+  try {
+    // can't update anything if not logged in
+    if (!req.session.loggedIn) {
+      res
+        .status(403)
+        .json({ message: "you can't make a comment when not logged in" });
+      return;
+    }
+
+    // checking formatting
+    if (!req.body.body) {
+      res.status(400).json({ message: "missing fields" });
+      return;
+    }
+
+    // finding the post
+    const postData = await Posts.findByPk(req.params.id);
+
+    // tell them if we can't find that post
+    if (!postData) {
+      res.status(404).json({ message: `no post with ID ${req.params.id}` });
+      return;
+    }
+
+    // all checks passed, lets add the comment
+    await postData.createComment(req.session.userId, req.body.body);
+    res.status(200).json({ message: "Added the comment successfully" });
   } catch (err) {
     res.status(500).json(err);
   }
