@@ -1,5 +1,4 @@
 const postFormHandler = async (event) => {
-  console.log("Hit the form handler!");
   event.preventDefault();
 
   const title = document.getElementById("post-title").value.trim();
