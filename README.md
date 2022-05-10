@@ -30,6 +30,8 @@ running `npm run seed`
 
 ## Usage 
 
+Deployed to: https://tranquil-eyrie-00353.herokuapp.com/
+
 When you go to the port it is served at (3001 by default) you will be allowed to
 create a user by clicking on login. 
 
