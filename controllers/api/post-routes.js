@@ -34,6 +34,41 @@ router.delete("/:id", async (req, res) => {
       return;
     }
 
+    // finding the post
+    const postData = await Posts.findByPk(req.params.id);
+
+    // tell them if we can't find that post
+    if (!postData) {
+      res.status(404).json({ message: `no post with ID ${req.params.id}` });
+      return;
+    }
+
+    // can't delete someone else's post
+    if (postData.userId != req.session.userId) {
+      res
+        .status(403)
+        .json("User is not permitted to delete someone else's post");
+      return;
+    }
+
+    // all checks passed, lets get rid of the post
+    await postData.destroy();
+    res.status(200).json({ message: "Removed the post successfully" });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    // can't update anything if not logged in
+    if (!req.session.loggedIn) {
+      res
+        .status(403)
+        .json({ message: "you can't update a post when not logged in" });
+      return;
+    }
+
     // checking formatting
     if (!req.body.body || req.body.title) {
       res.status(400).json({ message: "missing fields" });
@@ -57,8 +92,12 @@ router.delete("/:id", async (req, res) => {
       return;
     }
 
-    // all checks passed, lets get rid of the post
-    await postData.destroy();
+    // all checks passed, lets update the post
+    await postData.update({
+      title: req.body.title,
+      body: req.body.title,
+    });
+
     res.status(200).json({ message: "Removed the post successfully" });
   } catch (err) {
     res.status(500).json(err);
