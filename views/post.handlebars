@@ -1,20 +1,37 @@
 <div class="card mx-2">
-  <h2 class="card-title">{{post.title}}</h2>
-  <a href="/users/{{post.user.username}}">
-    <h6 class="card-subtitle mb-2 text-muted mx-2">{{post.user.username}}</h6>
-  </a>
   <div class="card-body">
-    {{post.body}}
-  </div>
-</div>
-
-{{#each comments as |comment|}}
-  <div class="card mt-2 mx-5">
-    <a href="/users/{{comment.user.username}}">
-      <h5 class="card-title ml-3">{{comment.user.username}}</h5>
+    <h2 class="card-title">{{post.title}}</h2>
+    <a href="/users/{{post.user.username}}">
+      <h6 class="card-subtitle mb-2 text-muted mx-2">{{post.user.username}}</h6>
     </a>
     <div class="card-body">
-      {{comment.body}}
+      {{post.body}}
+    </div>
+     <p style="text-muted">Posted at: {{post.createdAt}}<p>
+  </div>
+</div>
+{{#each comments as |comment|}}
+  <div class="card mt-2 mx-5">
+    <div class="card-body">
+      <a href="/users/{{comment.user.username}}">
+        <h5 class="card-title ml-3">{{comment.user.username}}</h5>
+      </a>
+      <div class="card-body">
+        {{comment.body}}
+      </div>
+      <p style="text-muted">Posted at: {{comment.createdAt}}<p>
     </div>
   </div>
 {{/each}}
+
+<div class="form-floating mt-3 mx-5">
+  <textarea
+    class="form-control mb-2"
+    placeholder="Post your thoughts"
+    id="floatingTextarea2"
+    style="height: 100px"
+  ></textarea>
+  <label for="floatingTextarea2">Add a comment!</label>
+
+  <button class="btn btn-primary" type="submit">Post!</button>
+</div>
