@@ -86,9 +86,7 @@ router.put("/:id", async (req, res) => {
 
     // can't update someone else's post
     if (postData.userId != req.session.userId) {
-      res
-        .status(403)
-        .json("User is not permitted to edit someone else's post");
+      res.status(403).json("User is not permitted to edit someone else's post");
       return;
     }
 
@@ -104,7 +102,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.post("/:id/comment", (req, res) =>{
+router.post("/:id/comment", async (req, res) => {
   try {
     // can't update anything if not logged in
     if (!req.session.loggedIn) {
@@ -137,7 +135,7 @@ router.post("/:id/comment", (req, res) =>{
   }
 });
 
-router.update("/comment/:commentId", async (req,res) =>{
+router.put("/comment/:commentId", async (req, res) => {
   try {
     // can't update anything if not logged in
     if (!req.session.loggedIn) {
@@ -162,21 +160,21 @@ router.update("/comment/:commentId", async (req,res) =>{
       return;
     }
 
-    if(commentData.userId != req.session.userId){
+    if (commentData.userId != req.session.userId) {
       res.status(404).json({ message: "can't edit some else's comment" });
     }
 
     // all checks passed, lets update the comment
     await commentData.update({
-      body: req.body.body
-    })
+      body: req.body.body,
+    });
     res.status(200).json({ message: "Updated the comment successfully" });
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-router.delete("/comment/:commentId", async (req,res) =>{
+router.delete("/comment/:commentId", async (req, res) => {
   try {
     // can't update anything if not logged in
     if (!req.session.loggedIn) {
@@ -195,7 +193,7 @@ router.delete("/comment/:commentId", async (req,res) =>{
       return;
     }
 
-    if(commentData.userId != req.session.userId){
+    if (commentData.userId != req.session.userId) {
       res.status(404).json({ message: "can't delete some else's comment" });
     }
 
@@ -206,6 +204,5 @@ router.delete("/comment/:commentId", async (req,res) =>{
     res.status(500).json(err);
   }
 });
-
 
 module.exports = router;
