@@ -8,6 +8,9 @@
       {{post.body}}
     </div>
      <p style="text-muted">Posted at: {{post.createdAt}}<p>
+       {{#if userPost}}
+      <button class="btn btn-danger" id="delete-post">Delete</button>
+      {{/if}}
   </div>
 </div>
 {{#each comments as |comment|}}
@@ -37,3 +40,4 @@
 </div>
 
 <script src="../assets/comment.js"></script>
+<script src="../assets/post.js"></script>
