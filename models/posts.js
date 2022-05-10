@@ -1,7 +1,16 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
+const Comments = require("./comments");
 
-class Posts extends Model {}
+class Posts extends Model {
+  createComment(user_id, body) {
+    return Comments.create({
+      user_id,
+      body,
+      post_id: this.id,
+    });
+  }
+}
 
 Posts.init(
   {
