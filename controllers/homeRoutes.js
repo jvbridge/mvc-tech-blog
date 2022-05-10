@@ -116,7 +116,14 @@ router.get("/posts/:id", async (req, res) => {
       return comment.get({ plain: true });
     });
 
-    res.render("post", { loggedIn: req.session.loggedIn, post, comments });
+    const userPost = postData.user_id === req.session.userId;
+    console.log("This post belongs to the current user: ", userPost);
+    res.render("post", {
+      userPost,
+      loggedIn: req.session.loggedIn,
+      post,
+      comments,
+    });
   } catch (err) {
     res.status(500).json(err);
   }

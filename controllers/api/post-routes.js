@@ -44,10 +44,12 @@ router.delete("/:id", async (req, res) => {
     }
 
     // can't delete someone else's post
-    if (postData.userId != req.session.userId) {
-      res
-        .status(403)
-        .json("User is not permitted to delete someone else's post");
+    if (postData.user_id != req.session.userId) {
+      res.status(403).json({
+        message: "User is not permitted to edit someone else's post",
+        userId: postData.user_id,
+        sessionId: req.session.userId,
+      });
       return;
     }
 
@@ -85,8 +87,12 @@ router.put("/:id", async (req, res) => {
     }
 
     // can't update someone else's post
-    if (postData.userId != req.session.userId) {
-      res.status(403).json("User is not permitted to edit someone else's post");
+    if (postData.user_id != req.session.userId) {
+      res.status(403).json({
+        message: "User is not permitted to edit someone else's post",
+        userId: postData.user_id,
+        sessionId: req.session.userId,
+      });
       return;
     }
 
