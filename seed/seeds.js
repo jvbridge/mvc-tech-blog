@@ -2,8 +2,8 @@ const sequelize = require("../config/connection");
 const { User, Posts } = require("../models");
 
 const names = require("./names.json");
-const websites = requrie("./websites");
-
+const websites = require("./websites.json");
+const tweets = require("./tweets.json");
 const postData = require("./post-data.json");
 
 const MAX_COMMENTS = 7;
@@ -47,6 +47,7 @@ const createUsers = (userCount) => {
   for (let i = 0; i < userCount; i++) {
     ret.push(createRandomUser(dict));
   }
+  return ret;
 };
 
 const seedDatabase = async () => {
@@ -63,11 +64,7 @@ const seedDatabase = async () => {
   for (const user of users) {
     const postCount = Math.floor(Math.random() * postData.length);
     for (let i = 0; i < postCount; i++) {
-      let postIndex = Math.floor(Math.random() * postData.length);
-      await user.createPost(
-        postData[postIndex].title,
-        postData[postIndex].body
-      );
+      await user.createPost(chooseRandom(tweets), chooseRandom(tweets));
     }
   }
 
@@ -80,13 +77,17 @@ const seedDatabase = async () => {
     const commentCount = Math.floor(Math.random() * MAX_COMMENTS);
     //
     for (let i = 0; i < commentCount; i++) {
-      const commenterIndex = Math.floor(Math.random() * users.length);
-      const currUser = users[commenterIndex];
-      const commentIndex = Math.floor(Math.random() * postData.length);
-      await currUser.createCommment(post.id, postData[commentIndex].body);
+      const currUser = chooseRandom(users);
+      await currUser.createCommment(post.id, chooseRandom(tweets));
     }
   }
 
+  const myUser = {
+    username: "jvbridge",
+    email: "jvbridge@gmail.com",
+    password: "password",
+  };
+  await User.create(myUser, { individualHooks: true });
   process.exit(0);
 };
 
