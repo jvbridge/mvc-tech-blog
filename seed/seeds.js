@@ -1,14 +1,58 @@
 const sequelize = require("../config/connection");
 const { User, Posts } = require("../models");
 
-const userData = require("./user-data.json");
+const names = require("./names.json");
+const websites = requrie("./websites");
+
 const postData = require("./post-data.json");
 
-MAX_COMMENTS = 7;
+const MAX_COMMENTS = 7;
+const USER_COUNT = 20;
+const DEFAULT_PASSWORD = "password";
+
+/**
+ * Returns a random member from a given array
+ * @param {Array} arr
+ * @returns
+ */
+const chooseRandom = (arr) => {
+  return arr[Math.floor(Math.random() * arr.length)];
+};
+
+/**
+ * Creates a random user that is unique to the dictionary
+ * @param {Object} dict dictionary of usernames and passwords
+ * @returns {Object[]}
+ */
+const createRandomUser = (dict) => {
+  const firstName = chooseRandom(names);
+  const lastName = chooseRandom(names);
+  const password = DEFAULT_PASSWORD;
+  const email = firstName + "@" + chooseRandom(websites);
+
+  const username = firstName[0] + lastName;
+  if (dict[username] || dict[email]) {
+    return createRandomUser(dict);
+  }
+
+  dict[username] = true;
+  dict[email] = true;
+
+  return { username, email, password };
+};
+
+const createUsers = (userCount) => {
+  const dict = {};
+  ret = [];
+  for (let i = 0; i < userCount; i++) {
+    ret.push(createRandomUser(dict));
+  }
+};
 
 const seedDatabase = async () => {
+  // sync up with the database
   await sequelize.sync({ force: true });
-
+  const userData = createUsers(USER_COUNT);
   // seeding users
   const users = await User.bulkCreate(userData, {
     individualHooks: true,
