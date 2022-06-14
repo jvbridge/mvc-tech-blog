@@ -1,8 +1,8 @@
 const { Model, DataTypes } = require("sequelize");
 const bcrypt = require("bcrypt");
-const sequelize = require("./config/connection");
-const Posts = require("./models/posts");
-const Comments = require("./models/comments");
+const sequelize = require("../config/connection");
+const Posts = require("./posts");
+const Comments = require("./comments");
 /**
  * User is a table used to store each individual user in the database.
  */
